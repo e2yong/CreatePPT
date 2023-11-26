@@ -2,3 +2,4 @@ application-db.properties
 application-openai.properties
 decoder-5.ckpt
 encoder-5.ckpt
+__pycache__
