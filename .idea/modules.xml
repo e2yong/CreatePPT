@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CreatePPT.iml" filepath="$PROJECT_DIR$/.idea/CreatePPT.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/create-ppt.main.iml" filepath="$PROJECT_DIR$/.idea/modules/create-ppt.main.iml" />
     </modules>
   </component>
 </project>

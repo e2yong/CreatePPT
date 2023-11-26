@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>I:GEULOO</title>
+</head>
+<body>
+<div>
+    <h1>I:GEULOO</h1>
+
+    <div>
+        <h2>파일 목록</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>파일이름</th>
+                    <th>파일경로</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="file, stat : ${files}">
+                    <td th:text="${stat.index + 1}"></td>
+                    <td th:text="${file.fileName}"></td>
+                    <td th:text="${file.filePath}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h2>파일 제거</h2>
+        <form action="/files/delete" method="post">
+            <div class="form-group">
+                <input type="text" id="deleteName" name="deleteName" placeholder="삭제할 파일 이름을 입력하세요">
+                <button type="submit">삭제</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <h2>파일 다운로드</h2>
+        <form action="/files/download" method="post">
+            <div class="form-group">
+                <input type="text" id="downloadName" name="downloadName" placeholder="다운로드할 파일 이름을 입력하세요">
+                <button type="submit">다운로드</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <br><button type="button" th:onclick="|location.href='@{/admin}'|">뒤로가기</button>
+    </div>
+</div>
+</body>
+</html>

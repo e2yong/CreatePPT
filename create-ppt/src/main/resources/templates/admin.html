@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>I:GEULOO</title>
+</head>
+<body>
+<div>
+    <h1>I:GEULOO</h1>
+
+    <h2>관리자 페이지</h2>
+    <div>
+        <p>회원 관리</p>
+        <p>
+            <a href="/members/new">회원 가입</a>
+            <a href="/members">회원 목록</a>
+        </p>
+
+        <p>파일 관리</p>
+        <p>
+            <a href="/files/upload">파일 업로드</a>
+            <a href="/files">파일 목록</a>
+        </p>
+    </div>
+    <br>
+    <div>
+        <form action="/logout" method="post">
+            <div>
+                <button type="submit">로그아웃</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>I:GEULOO</title>
+</head>
+<body>
+<div>
+    <h1>I:GEULOO</h1>
+
+    <h2><span th:text="${member.name}">회원</span>님의 작업들</h2>
+
+    <div>
+        <h2>작업 목록</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>파일이름</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="file, stat : ${files}">
+                <td th:text="${stat.index + 1}"></td>
+                <td th:text="${file.fileName}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

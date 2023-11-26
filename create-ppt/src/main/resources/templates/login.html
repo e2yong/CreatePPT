@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>I:GEULOO</title>
+</head>
+<body>
+<div>
+    <h1>I:GEULOO</h1>
+
+    <div>
+        <h2>로그인</h2>
+        <form action="/login" method="post">
+            <div>
+                <label for="loginId">ID</label>
+                <input type="text" id="loginId" name="loginId" placeholder="ID를 입력하세요">
+            </div>
+            <div>
+                <label for="password">PW</label>
+                <input type="text" id="password" name="password" placeholder="비밀번호를 입력하세요">
+            </div>
+            <div>
+                <button type="submit">로그인</button>
+            </div>
+            <div>
+                <button type="button" th:onclick="|location.href='@{/members/new}'|">회원 가입</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>I:GEULOO</title>
+</head>
+<body>
+<div class="container">
+    <h1>I:GEULOO</h1>
+
+    <div>
+        <h2>회원 목록</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>ID</th>
+                <th>이름</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member, stat : ${members}">
+                <td th:text="${stat.index + 1}"></td>
+                <td th:text="${member.loginId}"></td>
+                <td th:text="${member.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h2>회원 삭제</h2>
+        <form action="/members/delete" method="post">
+            <div class="form-group">
+                <input type="text" id="loginId" name="loginId" placeholder="삭제할 ID를 입력하세요">
+                <button type="submit">삭제</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <br><button type="button" th:onclick="|location.href='@{/}'|">뒤로가기</button>
+    </div>
+</div>
+</body>
+</html>
