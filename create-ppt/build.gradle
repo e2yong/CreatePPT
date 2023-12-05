@@ -37,6 +37,15 @@ dependencies {
 	implementation 'org.apache.poi:poi:5.2.2'
 	implementation 'org.apache.poi:poi-ooxml:5.2.2'
 
+	// Multipart
+	implementation 'commons-io:commons-io:2.11.0'
+	implementation 'org.springframework:spring-test:6.0.11'
+
+	// WebClient
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	// JSON
+	implementation 'org.json:json:20230618'
+
 }
 
 tasks.named('test') {

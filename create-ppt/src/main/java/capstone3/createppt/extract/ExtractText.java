@@ -1,22 +1,21 @@
-package capstone3.createppt.file;
+package capstone3.createppt.extract;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFPictureData;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.List;
+
+import static capstone3.createppt.file.PathConst.*;
 
 // Word(.docx) 파일을 Text(.txt) 파일로 변환 및 저장
-public class Word2Text {
+public class ExtractText {
 
-    // Word 파일에서 텍스트 추출
+    // 워드 파일에서 텍스트 추출
     public static void extractText(String inputFilePath, String outputFilePath) {
         try {
             // 파일 입출력 스트림
@@ -43,7 +42,7 @@ public class Word2Text {
     }
 
     // 워드 파일에서 텍스트와 이미지 추출
-    public static void extractTextAndImage(String inputFilePath, String outputFilePath, String imagePath) {
+    public static void extractTextAndImage(String inputFilePath, String outputFilePath) {
         try {
             // 파일 입출력 스트림
             FileInputStream fis = new FileInputStream(inputFilePath);
@@ -51,40 +50,49 @@ public class Word2Text {
 
             // 워드(.docx) 파일 처리
             XWPFDocument docx = new XWPFDocument(OPCPackage.open(fis));
-            // 워드의 모든 이미지 데이터 추출
-            List<XWPFPictureData> images = docx.getAllPictures();
-            int imageCounter = 1;   // 이미지 순서
-
             // 텍스트 추출을 위한 StringBuilder
             StringBuilder text = new StringBuilder();
+            int imageCounter = 1;   // 이미지 순서
 
             // 문단과 런을 순회하며 텍스트 추출
             for (XWPFParagraph paragraph : docx.getParagraphs()) {
                 for (XWPFRun run : paragraph.getRuns()) {
-                    text.append(run.getText(0));
+                    // 만약 이미지가 있으면
+                    if (run.getEmbeddedPictures() != null && !run.getEmbeddedPictures().isEmpty()) {
+                        // 이미지 캡셔닝
+                        for (XWPFPicture picture : run.getEmbeddedPictures()) {
+                            // XWPFPicureData로 변환
+                            XWPFPictureData image = picture.getPictureData();
+
+                            // 이미지 파일 이름 생성(image1.jpg)
+                            String imageName = "image" + imageCounter++ + "." + image.suggestFileExtension();
+
+                            // 이미지 서버에 저장
+                            byte[] imageBytes = image.getData();
+                            File imageFile = new File(IMAGE_PATH, imageName);
+                            FileUtils.writeByteArrayToFile(imageFile, imageBytes);
+
+                            // 이미지 캡셔닝
+                            CaptionWebClientService captionService = new CaptionWebClientService();
+                            String caption = captionService.post(imageFile.getPath());
+
+                            // 텍스트 파일에 이미지 정보 추가
+                            text.append("\n<image: " + imageName + ", caption: " + caption + ", path: " + IMAGE_PATH + imageName + ">\n");
+                        }
+                    }
+                    // 이미지가 없으면
+                    else {
+                        text.append(run.getText(0));
+                    }
                 }
+                text.append("\n");
             }
 
-            // 이미지 처리
-            for (XWPFPictureData image : images) {
-                // 이미지를 서버에 저장
-                String imageName = "image" + imageCounter++ + "." + image.suggestFileExtension();
-                byte[] imageBytes = image.getData();
-                File imageFile = new File(imagePath, imageName);
-                FileUtils.writeByteArrayToFile(imageFile, imageBytes);
-
-                // 텍스트에 이미지 정보 추가
-                // 나중에 이미지 캡셔닝 적용
-                text.append("<" + imageName + ", " + imagePath + ">");
-            }
-
-            // 파일 저장
+            // 텍스트 파일 저장
             System.out.println("==== docx text extractor ====");
             FileUtils.writeStringToFile(new File(outputFilePath), text.toString(), "UTF-8");
         } catch (Exception e) {
             System.out.println(e);
         }
     }
-
-    // 이미지 캡셔닝으로 이미지를 텍스트로 변환
 }

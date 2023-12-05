@@ -1,7 +1,7 @@
 package capstone3.createppt.login;
 
 import capstone3.createppt.entity.Member;
-import capstone3.createppt.Repository.MemberRepository;
+import capstone3.createppt.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service

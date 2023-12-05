@@ -1,7 +1,7 @@
 package capstone3.createppt.work;
 
 import capstone3.createppt.entity.Work;
-import capstone3.createppt.Repository.WorkRepository;
+import capstone3.createppt.repository.WorkRepository;
 import capstone3.createppt.file.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -29,11 +29,12 @@ public class FileController {
     }
 
     @PostMapping("/files/upload")
-    public String upload(FileDto fileDto) throws IOException {
+    public String upload(FileForm form) throws IOException {
         try {
             // 파일 업로드
-            fileService.uploadFile(fileDto);
-            return "redirect:/files";
+            System.out.println("파일 업로드");
+            fileService.uploadFile(form);
+            return "redirect:/";
         } catch (IllegalArgumentException e) {
             // 파일이 존재하지 않는 경우
             return "redirect:/";

@@ -27,10 +27,10 @@ public class MemberController {
 
     // 회원 생성
     @PostMapping("/members/new")
-    public String create(MemberDto memberDto) {
+    public String create(MemberForm form) {
         try {
             // 회원 가입
-            memberService.join(memberDto);
+            memberService.join(form);
         } catch (IllegalStateException e) {
             // 중복 로그인 ID로 회원 가입하는 경우
             return "redirect:/members/new";

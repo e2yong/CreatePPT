@@ -1,7 +1,7 @@
 package capstone3.createppt.member;
 
 import capstone3.createppt.entity.Member;
-import capstone3.createppt.Repository.MemberRepository;
+import capstone3.createppt.repository.MemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

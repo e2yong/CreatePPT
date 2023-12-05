@@ -1,9 +1,9 @@
 package capstone3.createppt.file;
 
 import capstone3.createppt.entity.DocFile;
-import capstone3.createppt.Repository.FileRepository;
+import capstone3.createppt.extract.ExtractText;
+import capstone3.createppt.repository.FileRepository;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +17,9 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 
+import static capstone3.createppt.extract.ExtractText.*;
+import static capstone3.createppt.file.PathConst.*;
+
 @Service
 @Slf4j
 @Transactional
@@ -28,16 +31,11 @@ public class FileService {
         this.fileRepository = fileRepository;
     }
 
-    // 파일 저장 경로
-    private final String path = "C:/Users/e2yon/Documents/CreatePPT/CreatePPT/create-ppt/src/main/resources/";
-    private final String uploadPath = "storage/upload/";  // 업로드 파일 경로
-    private final String resultPath = "storage/result/";  // ppt, 대본 파일 경로
-
     // 파일 업로드
-    public void uploadFile(FileDto fileDto) throws IOException {
+    public String uploadFile(FileForm form) throws IOException {
 
-        String title = fileDto.getTitle();
-        MultipartFile file = fileDto.getFile();
+        String title = form.getTitle();
+        MultipartFile file = form.getFile();
 
         if (!file.isEmpty()) {
             // 원본 파일 이름(확장자 포함)
@@ -56,20 +54,28 @@ public class FileService {
             String fileName = title + "_upload." + fileType;
 
             // 업로드 파일 경로
-            String fullPath = path + uploadPath + fileName;
+            String filePath = UPLOAD_PATH + fileName;
 
             // 빌더
             DocFile docFile = DocFile.builder()
                     .fileName(fileName)
                     .fileType(fileType)
-                    .filePath(fullPath)
+                    .filePath(filePath)
                     .build();
 
             // 중복 파일 검증
             validateDuplicateFile(docFile);
 
+            // 파일 저장
             saveFile(file, docFile);
 
+            // 파일 추출
+            String inputFile = UPLOAD_PATH + fileName;
+            String outputFile = EXTRACT_PATH + title + "_extract.txt";
+            // extractText(inputFile, outputFile);
+            extractTextAndImage(inputFile, outputFile);
+
+            return fileName;
         } else {
             // 에러 처리
             log.error("업로드된 파일이 없음");
@@ -77,7 +83,7 @@ public class FileService {
         }
     }
 
-    // 파일 저장
+    // 파일 저장(업로드 파일)
     public Long saveFile(MultipartFile file, DocFile docFile) throws IOException {
         // 파일 DB에 저장
         fileRepository.save(docFile);

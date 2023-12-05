@@ -1,4 +1,4 @@
-package capstone3.createppt.Repository;
+package capstone3.createppt.repository;
 
 import capstone3.createppt.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

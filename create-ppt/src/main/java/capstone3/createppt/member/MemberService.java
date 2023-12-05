@@ -1,7 +1,7 @@
 package capstone3.createppt.member;
 
 import capstone3.createppt.entity.Member;
-import capstone3.createppt.Repository.MemberRepository;
+import capstone3.createppt.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +19,12 @@ public class MemberService {
     }
 
     // 회원 가입
-    public Long join(MemberDto memberDto) {
+    public Long join(MemberForm form) {
         // 빌더로 회원 생성
         Member member = Member.builder()
-                .loginId(memberDto.getLoginId())
-                .password(memberDto.getPassword())
-                .name(memberDto.getName())
+                .loginId(form.getLoginId())
+                .password(form.getPassword())
+                .name(form.getName())
                 .build();
 
         // 중복 회원 검증
