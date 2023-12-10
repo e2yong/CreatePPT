@@ -4,3 +4,4 @@ decoder-5.ckpt
 encoder-5.ckpt
 __pycache__
 storage
+setting.py
