@@ -48,7 +48,7 @@ async def summary(filename: str = Form(...)):
 # 파일 이름을 받는다.
 @app.post("/ppt")
 async def summary(filename: str = Form(...)):
-    # PPT 생성에 사용할 요약문 파일
+    # PPT 생성에 사용할 요약문 파일일
     text_filename = filename
     text_filepath = EXTRACT_DIR + filename
     print("텍스트 파일 경로: " + text_filepath)
@@ -65,10 +65,10 @@ async def summary(filename: str = Form(...)):
     # 결과물을 디렉터리에 저장
 
     # PPT 파일 이름
-    ppt_filename = text_filename.replace("_extract.txt", "_summary.txt")
-    print("요약 파일 이름: " + ppt_filename)
+    summary_filename = text_filename.replace("_extract.txt", "_summary.txt")
+    print("요약 파일 이름: " + summary_filename)
 
-    return {"ppt": ppt_filename}
+    return {"summary": summary_filename}
 
 # 이미지 캡셔닝
 # UploadFile이 File보다 이미지 처리에 적합
