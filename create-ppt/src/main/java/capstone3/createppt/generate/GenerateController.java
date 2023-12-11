@@ -1,7 +1,6 @@
 package capstone3.createppt.generate;
 
 import capstone3.createppt.file.FileService;
-import capstone3.createppt.file.PathConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
