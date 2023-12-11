@@ -30,7 +30,7 @@ public class FileService {
     }
 
     // 파일 업로드
-    public String uploadFile(String loginId, FileForm form) throws IOException {
+    public Long uploadFile(String loginId, FileForm form) throws IOException {
 
         String title = form.getTitle();
         MultipartFile file = form.getFile();
@@ -65,14 +65,23 @@ public class FileService {
             validateDuplicateFile(docFile);
 
             // 파일 저장
-            saveFile(file, docFile);
+            Long uploadFileId = saveFile(file, docFile);
 
-            return fileName;
+            return uploadFileId;
         } else {
             // 에러 처리
             log.error("업로드된 파일이 없음");
             throw new IllegalArgumentException("업로드된 파일이 없음");
         }
+    }
+
+    // 파일 저장(PPT, 대본 파일)
+    public Long saveFile(DocFile docFile) {
+        // 파일을 DB에 저장
+        fileRepository.save(docFile);
+
+        // 파일 저장 후 파일 번호 반환
+        return docFile.getFileId();
     }
 
     // 파일 저장(업로드 파일)

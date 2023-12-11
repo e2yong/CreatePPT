@@ -43,8 +43,11 @@ public class FileController {
 
         // 세션이 존재하면 로그인 정보 가져오기
         Member loginMember = (Member)session.getAttribute(SessionConst.LOGIN_MEMBER);
+        Long memberId = loginMember.getId();
+
         String loginId = loginMember.getLoginId();
         System.out.println("파일을 업로드하는 사용자: " + loginId);
+
         String title = form.getTitle();
         System.out.println("작업할 발표 제목: " + title);
 
@@ -54,7 +57,12 @@ public class FileController {
         try {
             // 파일 업로드
             System.out.println("파일 업로드");
-            fileService.uploadFile(loginId, form);
+            Long uploadFileId = fileService.uploadFile(loginId, form);
+
+            // 회원 번호, 업로드 파일 번호 세션에 저장
+            session.setAttribute("memberId", memberId);
+            session.setAttribute("title", title);
+            session.setAttribute("uploadFileId", uploadFileId);
 
             return "redirect:/files/extract";
         } catch (IllegalArgumentException e) {

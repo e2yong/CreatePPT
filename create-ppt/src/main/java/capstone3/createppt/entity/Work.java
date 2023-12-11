@@ -16,6 +16,9 @@ public class Work {
     @Column(name = "work_id")
     private Long workId;            // 작업 번호, PRIMARY KEY
 
+    @Column(name = "title")
+    private String title;           // 발표 주제
+
     @Column(name = "member_id")
     private Long memberId;          // 회원 번호
 
@@ -29,7 +32,8 @@ public class Work {
     private Long scriptFile;        // 대본 파일 번호
 
     @Builder
-    public Work(Long memberId, Long uploadFile, Long pptFile, Long scriptFile) {
+    public Work(String title, Long memberId, Long uploadFile, Long pptFile, Long scriptFile) {
+        this.title = title;
         this.memberId = memberId;
         this.uploadFile = uploadFile;
         this.pptFile = pptFile;

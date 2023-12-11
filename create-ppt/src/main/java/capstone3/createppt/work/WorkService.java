@@ -3,6 +3,8 @@ package capstone3.createppt.work;
 import capstone3.createppt.entity.Work;
 import capstone3.createppt.repository.WorkRepository;
 import capstone3.createppt.file.FileService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +25,35 @@ public class WorkService {
         this.fileService = fileService;
     }
 
+    // 작업 DB에 저장
+    public Long saveWork(HttpServletRequest request) {
+        // 세션 가져오기(없으면 null 반환)
+        HttpSession session = request.getSession(false);
+
+        // 세션에서 필요한 값 가져오기
+        String title = (String) session.getAttribute("title");
+        Long memberId = (Long) session.getAttribute("memberId");
+        Long uploadFileId = (Long) session.getAttribute("uploadFileId");
+        Long pptFileId = (Long) session.getAttribute("pptFileId");
+        Long scriptFileId = (Long) session.getAttribute("scriptFileId");
+
+        // work 객체 생성
+        Work work = Work.builder()
+                .title(title)
+                .memberId(memberId)
+                .uploadFile(uploadFileId)
+                .pptFile(pptFileId)
+                .scriptFile(scriptFileId)
+                .build();
+
+        // DB에 작업 저장
+        workRepository.save(work);
+
+        return work.getWorkId();
+    }
+
     // 작업 모두 조회
-    public List<Work> finFiles() {return workRepository.findAll();}
+    public List<Work> findFiles() {return workRepository.findAll();}
 
     // 작업 삭제(업로드 파일, PPT 파일, 대본 파일 모두 삭제)
     public void deleteWork(Long workId) {

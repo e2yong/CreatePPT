@@ -75,7 +75,7 @@ async def summary(filename: str = Form(...)):
     write_txt_no_enter(ppttxt_filepath,ppt_txt)
 
     # 만들어진 파일들의 절대경로를 리턴값으로 제공한다
-    return {"추출 파일 경로": extract_caption_filepath,"요약 파일 경로" : summary_filepath,"대본 파일 경로" : word_filepath,"pptx용 파일 경로" : ppttxt_filepath}
+    return {"extractFilePath": extract_caption_filepath,"summaryFilePath" : summary_filepath, "scriptFilePath" : word_filepath,"pptxTextFilePath" : ppttxt_filepath}
 
 # PPT 생성
 # 파일 이름을 받는다.
