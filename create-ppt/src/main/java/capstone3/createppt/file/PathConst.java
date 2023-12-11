@@ -7,4 +7,5 @@ public class PathConst {
     public static final String EXTRACT_PATH = BASE_PATH + "storage/extract/";
     public static final String IMAGE_PATH = BASE_PATH + "storage/image/";
     public static final String RESULT_PATH = BASE_PATH + "storage/result/";
+    public static final String ZIP_PATH = BASE_PATH + "storage/zip/";
 }

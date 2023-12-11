@@ -2,9 +2,6 @@ package capstone3.createppt.file;
 
 import org.junit.jupiter.api.Test;
 
-import static capstone3.createppt.extract.ExtractText.*;
-import static capstone3.createppt.file.PathConst.*;
-
 class ExtractTextTest {
     @Test
     void extract() {

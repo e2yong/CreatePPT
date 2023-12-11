@@ -1,12 +1,9 @@
 package capstone3.createppt.extract;
 
 import capstone3.createppt.file.PathConst;
-import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CaptionWebClientServiceTest {
 

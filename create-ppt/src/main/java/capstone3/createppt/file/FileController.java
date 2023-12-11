@@ -1,7 +1,11 @@
 package capstone3.createppt.file;
 
 import capstone3.createppt.entity.DocFile;
+import capstone3.createppt.entity.Member;
+import capstone3.createppt.login.SessionConst;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+
+import static capstone3.createppt.extract.ExtractText.extractTextAndImage;
+import static capstone3.createppt.file.PathConst.EXTRACT_PATH;
+import static capstone3.createppt.file.PathConst.UPLOAD_PATH;
 
 @Slf4j
 @Controller
@@ -29,16 +37,50 @@ public class FileController {
     }
 
     @PostMapping("/files/upload")
-    public String upload(FileForm form) throws IOException {
+    public String upload(HttpServletRequest request, FileForm form) throws IOException {
+        // 세션 가져오기(없으면 null 반환)
+        HttpSession session = request.getSession(false);
+
+        // 세션이 존재하면 로그인 정보 가져오기
+        Member loginMember = (Member)session.getAttribute(SessionConst.LOGIN_MEMBER);
+        String loginId = loginMember.getLoginId();
+        System.out.println("파일을 업로드하는 사용자: " + loginId);
+        String title = form.getTitle();
+        System.out.println("작업할 발표 제목: " + title);
+
+        String filename = loginId + "_" + title;
+        session.setAttribute("filename", filename);
+
         try {
             // 파일 업로드
             System.out.println("파일 업로드");
-            fileService.uploadFile(form);
-            return "redirect:/";
+            fileService.uploadFile(loginId, form);
+
+            return "redirect:/files/extract";
         } catch (IllegalArgumentException e) {
             // 파일이 존재하지 않는 경우
             return "redirect:/";
         }
+    }
+
+    // 파일 추출
+    @GetMapping("/files/extract")
+    public String extractFile() {
+        return "files/extractFile";
+    }
+
+    @PostMapping("/files/extract")
+    public String extract(HttpServletRequest request){
+        // 세션 가져오기(없으면 null 반환)
+        HttpSession session = request.getSession(false);
+        String filename = (String)session.getAttribute("filename");
+
+        // 파일 추출
+        String inputFile = UPLOAD_PATH + filename + "_upload.docx";
+        String outputFile = EXTRACT_PATH + filename + "_extract.txt";
+        extractTextAndImage(inputFile, outputFile);
+
+        return "redirect:/generate/summary";
     }
 
     // 파일 목록 조회

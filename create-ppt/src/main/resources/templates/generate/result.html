@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>I:GEULOO</title>
+</head>
+<body>
+<div>
+    <h1>I:GEULOO</h1>
+
+    <h2>생성 결과</h2>
+    <div>
+        <form action="/generate/download" method="post" enctype="multipart/form-data">
+            <div>
+                <button type="submit">PPT 다운로드</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <form action="/generate/end" method="post" enctype="multipart/form-data">
+            <div>
+                <button type="submit">종료</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

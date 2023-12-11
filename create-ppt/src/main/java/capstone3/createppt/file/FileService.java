@@ -1,7 +1,6 @@
 package capstone3.createppt.file;
 
 import capstone3.createppt.entity.DocFile;
-import capstone3.createppt.extract.ExtractText;
 import capstone3.createppt.repository.FileRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Optional;
 
-import static capstone3.createppt.extract.ExtractText.*;
 import static capstone3.createppt.file.PathConst.*;
 
 @Service
@@ -32,7 +30,7 @@ public class FileService {
     }
 
     // 파일 업로드
-    public String uploadFile(FileForm form) throws IOException {
+    public String uploadFile(String loginId, FileForm form) throws IOException {
 
         String title = form.getTitle();
         MultipartFile file = form.getFile();
@@ -51,7 +49,7 @@ public class FileService {
             }
 
             // 업로드할 파일 이름
-            String fileName = title + "_upload." + fileType;
+            String fileName = loginId + "_" + title + "_upload." + fileType;
 
             // 업로드 파일 경로
             String filePath = UPLOAD_PATH + fileName;
@@ -68,12 +66,6 @@ public class FileService {
 
             // 파일 저장
             saveFile(file, docFile);
-
-            // 파일 추출
-            String inputFile = UPLOAD_PATH + fileName;
-            String outputFile = EXTRACT_PATH + title + "_extract.txt";
-            // extractText(inputFile, outputFile);
-            extractTextAndImage(inputFile, outputFile);
 
             return fileName;
         } else {
