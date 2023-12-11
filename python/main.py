@@ -4,6 +4,8 @@ from GenerateSummary.Generate_text import *
 from GenerateSummary.word import *
 from Read_data.Read_data import *
 
+from PPT_Generator_fix import *
+
 from ImageCaptioning.image_captioning import *
 
 from fastapi import FastAPI, UploadFile, Form
@@ -80,7 +82,9 @@ async def summary(filename: str = Form(...)):
 # PPT 생성
 # 파일 이름을 받는다.
 @app.post("/ppt")
-async def summary(filename: str = Form(...)):
+async def ppt(filename: str = Form(...)):
+    print("연결완료")
+
     # PPT 생성에 사용할 요약문 파일
     text_filename = filename
     text_filepath = EXTRACT_DIR + filename
@@ -89,14 +93,14 @@ async def summary(filename: str = Form(...)):
 
     # PPT 생성
     print("PPT 생성 중...")
-    generator_main(f"{text_filepath}/{text_filename}")
+    generator_main(text_filepath)
     # PPT 저장
-    ppt_filename = generate_ppt.save()
+    ppt_filename = f"{ppt_name}.pptx"
 
     # PPT 파일 이름
     print("PPT 저장 완료: " + ppt_filename)
 
-    return {"summary": ppt_filename}
+    return {"pptFileName": ppt_filename}
 
 # 이미지 캡셔닝
 # UploadFile이 File보다 이미지 처리에 적합
