@@ -9,11 +9,11 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.File;import java.io.IOException;
 
 import static capstone3.createppt.file.PathConst.RESULT_PATH;
 import static capstone3.createppt.file.PathConst.ZIP_PATH;
@@ -87,7 +87,7 @@ public class GenerateController {
         // PPT 생성용 텍스트 파일
         String pptTxtFile = filename + "_pptx.txt";
         // PPT 생성
-        // String jsonString = webClientService.postPpt(pptTxtFile);
+        String jsonString = webClientService.postPpt(pptTxtFile);
 
         // PPT 파일
         System.out.println("PPT 파일을 DB에 저장");
@@ -106,22 +106,43 @@ public class GenerateController {
         session.setAttribute("pptFileId", pptFileId);
 
         // 작업한 내용 DB에 저장
-        workService.saveWork(request);
+        Long workId = workService.saveWork(request);
+        session.setAttribute("workId", workId);
 
         return "redirect:/generate/result";
     }
 
     // 결과 다운로드
     @GetMapping("/generate/result")
-    public String generateResult() {
+    public String generateResult(Model model, HttpServletRequest request) {
+        // 세션 가져오기(없으면 null 반환)
+        HttpSession session = request.getSession(false);
+
+        // 작업 이름
+        String title = (String) session.getAttribute("title");
+        model.addAttribute("title", title);
+
+        // PPT
+        Long pptFileId = (Long) session.getAttribute("pptFileId");
+        File pptFile = new File(fileService.findFilePathById(pptFileId));
+        String pptName = pptFile.getName();
+        model.addAttribute("ppt", pptName);
+
+        // 대본
+        Long scriptFileId = (Long) session.getAttribute("scriptFileId");
+        File scriptFile = new File(fileService.findFilePathById(scriptFileId));
+        String scriptName = scriptFile.getName();
+        model.addAttribute("script", scriptName);
+
         return "generate/result";
     }
 
     @PostMapping("/generate/download")
-    public String downloadPpt(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String download(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 세션 가져오기(없으면 null 반환)
         HttpSession session = request.getSession(false);
         String filename = (String)session.getAttribute("filename");
+        String title = (String) session.getAttribute("title");
 
         // 다운받을 ppt 파일
         String pptName = filename + "_ppt.pptx";
@@ -132,11 +153,12 @@ public class GenerateController {
         String scriptPath = RESULT_PATH + scriptName;
 
         // result.zip으로 압축하기
-        generateService.resultZip(pptPath, scriptPath);
-        String zipPath = ZIP_PATH + "result.zip";
+        String zipName = title + ".zip";
+        generateService.resultZip(zipName, pptPath, scriptPath);
+        String zipPath = ZIP_PATH + zipName;
 
         // 다운받기
-        generateService.downloadResult(zipPath, response);
+        generateService.downloadZip(zipPath, response);
 
         return "redirect:/generate/download";
     }

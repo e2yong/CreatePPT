@@ -9,12 +9,15 @@
     <h1>I:GEULOO</h1>
 
     <h2>홈 화면입니다. <span th:text="${member.name}">회원</span>님 안녕하세요.</h2>
+
     <div>
+        <h3>발표자료 생성</h3>
         <button type="button" th:onclick="|location.href='@{/files/upload}'|">Create PPT</button>
     </div>
-    <br>
+
     <div>
-        <button type="button" th:onclick="|location.href='@{/files}'|">작업 목록</button>
+        <h3>발표자료 확인</h3>
+        <button type="button" th:onclick="|location.href='@{/works}'|">작업 목록</button>
     </div>
     <br>
     <div>

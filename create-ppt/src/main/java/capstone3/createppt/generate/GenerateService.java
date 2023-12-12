@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.*;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -27,21 +28,21 @@ public class GenerateService {
         // 사용 중인 파일 종료
         System.gc();
 
-        // extract 파일 비우기
+        // extract 디렉터리 비우기
         File extractDirectory = new File(PathConst.EXTRACT_PATH);
         FileUtils.cleanDirectory(extractDirectory);
 
-        // image 파일 비우기
+        // image 디렉터리 비우기
         File imageDirectory = new File(PathConst.IMAGE_PATH);
         FileUtils.cleanDirectory(imageDirectory);
 
-        // zip 파일 비우기
+        // zip 디렉터리 비우기
         File zipDirectory = new File(PathConst.ZIP_PATH);
         FileUtils.cleanDirectory(zipDirectory);
     }
 
     // 결과 다운로드
-    public void downloadResult(String zipPath, HttpServletResponse response) {
+    public void downloadZip(String zipPath, HttpServletResponse response) {
         File file = new File(zipPath);
 
         if (file.exists()) {
@@ -50,8 +51,10 @@ public class GenerateService {
                 response.setContentType("application/octet-stream");
                 // 다운로드할 파일의 크기 설정
                 response.setContentLength((int) file.length());
+
                 // 브라우저가 파일을 다운로드하도록 지시하는 헤더 설정
-                response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
+                String encodedFileName = URLEncoder.encode(file.getName(), "UTF-8").replace("+", "%20");
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedFileName + "\"");
 
                 // 파일을 읽기 위한 입력 스트릠 생성
                 FileInputStream fileInputStream = new FileInputStream(file);
@@ -76,7 +79,7 @@ public class GenerateService {
     }
 
     // 결과 압축
-    public String resultZip(String pptPath, String scriptPath) throws Exception {
+    public String resultZip(String zipName, String pptPath, String scriptPath) throws Exception {
         // 압축할 파일들 객체 생성
         File pptFile = new File(pptPath);
         File scriptFile = new File(scriptPath);
@@ -85,13 +88,9 @@ public class GenerateService {
         files.add(pptFile);
         files.add(scriptFile);
 
-        // result.zip 이름으로 파일 객체 생성
-        File zipFile = new File(PathConst.ZIP_PATH, "result.zip");
-
-        // 스트림에 사용 할 byte 지정
+        // 압축 파일 생성
+        File zipFile = new File(PathConst.ZIP_PATH, zipName);
         byte[] buf = new byte[4096];
-
-        // result.zip 생성
         try (ZipOutputStream out =
                      new ZipOutputStream(new FileOutputStream(zipFile))) {
             for (File file : files) {
@@ -110,6 +109,7 @@ public class GenerateService {
             }
         }
 
+        System.out.println(zipFile.getName());
         return zipFile.getPath();
     }
 }

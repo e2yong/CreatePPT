@@ -139,7 +139,7 @@ def insert_two_lines(slide, shape_width, shape_height):
     line2.line.width = Pt(2)
 
 ### PPT 생성 모듈 ###
-def generate_ppt(lines): 
+def generate_ppt(filename, lines): 
     prs = Presentation("theme0.pptx")
 
     ### 슬라이드 제작 함수 ###
@@ -297,17 +297,18 @@ def generate_ppt(lines):
     ### PPT 생성 후 저장 ###
     parse_text(lines)
 
-    ppt_name = re.sub(r"[^\uAC00-\uD7A30-9a-zA-Z\s]", "", find_title())
-    prs.save(f"{RESULT_DIR}/{ppt_name}.pptx")
+    ppt_name = filename.replace("_pptx.txt", "_ppt.pptx")
+    # ppt_name = re.sub(r"[^\uAC00-\uD7A30-9a-zA-Z\s]", "", find_title())
+    prs.save(f"{RESULT_DIR}/{ppt_name}")
     print("PPT was successfully saved")
 
     delete_all_slides()
 
 ### main 함수 ###
-def generator_main(extract_text):
+def generator_main(filename, extract_text):
     global unique_image_name
     unique_image_name = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in
                                 range(16))   
     
     text = get_original_text(extract_text)
-    generate_ppt(text)
+    generate_ppt(filename, text)

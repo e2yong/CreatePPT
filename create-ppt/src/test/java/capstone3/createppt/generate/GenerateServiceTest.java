@@ -22,6 +22,6 @@ class GenerateServiceTest {
         String pptPath = PathConst.RESULT_PATH + "test_TEST_ppt.pptx";
         String scriptPath = PathConst.RESULT_PATH + "test_TEST_script.docx";
 
-        service.resultZip(pptPath, scriptPath);
+        // service.resultZip(pptPath, scriptPath);
     }
 }

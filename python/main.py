@@ -93,9 +93,9 @@ async def ppt(filename: str = Form(...)):
 
     # PPT 생성
     print("PPT 생성 중...")
-    generator_main(text_filepath)
+    generator_main(text_filename, text_filepath)
     # PPT 저장
-    ppt_filename = f"{ppt_name}.pptx"
+    ppt_filename = text_filename.replace("_pptx.txt", "_ppt.pptx")
 
     # PPT 파일 이름
     print("PPT 저장 완료: " + ppt_filename)

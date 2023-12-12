@@ -8,15 +8,20 @@
 <div>
     <h1>I:GEULOO</h1>
 
-    <h2>생성 결과</h2>
+    <h2><span th:text="${title}">작업</span> 생성 결과</h2>
+    <div>
+        <span th:text="${ppt}">ppt</span>
+        <br>
+        <span th:text="${script}">script</span>
+    </div>
     <div>
         <form action="/generate/download" method="post" enctype="multipart/form-data">
             <div>
-                <button type="submit">PPT 다운로드</button>
+                <button type="submit">다운로드</button>
             </div>
         </form>
     </div>
-
+    <br>
     <div>
         <form action="/generate/end" method="post" enctype="multipart/form-data">
             <div>

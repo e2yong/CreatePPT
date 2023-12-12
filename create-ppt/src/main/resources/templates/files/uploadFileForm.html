@@ -9,18 +9,21 @@
     <h1>I:GEULOO</h1>
 
     <div>
-        <h2>파일 업로드</h2>
+        <h2>조사자료 파일 업로드</h2>
         <form action="/files/upload" method="post" enctype="multipart/form-data">
             <div>
-                <label for="title">제목</label>
-                <input type="text" id="title" name="title" placeholder="제목">
+                <label for="title">작업이름</label>
+                <input type="text" id="title" name="title" placeholder="작업이름">
             </div>
             <div>
-                <label for="file">파일</label>
+                <label for="file">조사자료</label>
                 <input type="file" id="file" name="file">
             </div>
             <div>
-                <button type="submit">업로드</button>
+                <button type="submit">업로드하기</button>
+            </div>
+            <br>
+            <div>
                 <button type="button" th:onclick="|location.href='@{/}'|">취소</button>
             </div>
         </form>

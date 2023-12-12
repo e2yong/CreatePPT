@@ -112,6 +112,21 @@ public class FileService {
         return fileRepository.findAll();
     }
 
+    // 파일 번호로 경로 조회
+    public String findFilePathById(Long fileId) {
+        Optional<DocFile> file = fileRepository.findByFileId(fileId);
+
+        // 파일 경로 반환
+        if (file.isPresent()) {
+            String filePath = file.get().getFilePath();
+            System.out.println(filePath);
+            return filePath;
+        } else {
+            // 파일이 DB에 없을 경우
+            log.error("파일이 DB에 없음");
+            throw new IllegalArgumentException("파일이 DB에 없음");
+        }
+    }
 
 
     // 파일 삭제(파일 이름으로)

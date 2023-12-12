@@ -8,24 +8,46 @@
 <div>
     <h1>I:GEULOO</h1>
 
-    <h2><span th:text="${member.name}">회원</span>님의 작업들</h2>
-
     <div>
-        <h2>작업 목록</h2>
+        <h2><span th:text="${member.name}">회원</span>님의 작업 목록</h2>
         <table>
             <thead>
             <tr>
                 <th>#</th>
-                <th>파일이름</th>
+                <th>작업 이름</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="file, stat : ${files}">
+            <tr th:each="work, stat : ${works}">
                 <td th:text="${stat.index + 1}"></td>
-                <td th:text="${file.fileName}"></td>
+                <td th:text="${work.title}"></td>
             </tr>
             </tbody>
         </table>
+    </div>
+
+    <div>
+        <h2>작업 다운로드</h2>
+        <form action="/works/download" method="post">
+            <div class="form-group">
+                <input type="text" id="downloadName" name="downloadName" placeholder="다운로드할 작업 이름">
+                <button type="submit">다운로드</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <h2>작업 삭제</h2>
+        <form action="/works/delete" method="post">
+            <div class="form-group">
+                <input type="text" id="deleteName" name="deleteName" placeholder="삭제할 작업 이름">
+                <button type="submit">삭제</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        <br><button type="button" th:onclick="|location.href='@{/}'|">뒤로가기</button>
     </div>
 
 </div>
