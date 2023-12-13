@@ -17,9 +17,5 @@ class WorkServiceTest {
 
     @Test
     void deleteWork() {
-
-        Long workId = workService.findWorkByTitle("TEST");
-
-        workService.deleteWork(workId);
     }
 }

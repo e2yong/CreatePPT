@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <title>I:GEULOO</title>
 </head>
+<script th:inline="javascript">
+    function changeBtnName() {
+        const btnElement = document.getElementById('btn');
+        btnElement.innerText = '추출중';
+    }
+</script>
 <body>
 <div>
     <h1>I:GEULOO</h1>
 
     <div>
         <h2>텍스트와 이미지 추출</h2>
-        <form action="/files/extract" method="post" enctype="multipart/form-data">
+        <form action="/files/extract" method="post" enctype="multipart/form-data" onsubmit="changeBtnName()">
             <div>
-                <button type="submit">추출하기</button>
+                <button type="submit" id="btn">추출하기</button>
             </div>
         </form>
     </div>

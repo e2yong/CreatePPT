@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <title>I:GEULOO</title>
 </head>
+<script th:inline="javascript">
+    function changeBtnName() {
+        const btnElement = document.getElementById('btn');
+        btnElement.innerText = '생성중';
+    }
+</script>
 <body>
 <div>
     <h1>I:GEULOO</h1>
 
     <div>
         <h2>PPT 생성</h2>
-        <form action="/generate/ppt" method="post" enctype="multipart/form-data">
+        <form action="/generate/ppt" method="post" enctype="multipart/form-data" onsubmit="changeBtnName()">
             <div>
-                <button type="submit">생성하기</button>
+                <button type="submit" id="btn">생성하기</button>
             </div>
         </form>
     </div>

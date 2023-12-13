@@ -56,7 +56,8 @@ public class HomeController {
 
     // 로그인
     @PostMapping("/login")
-    public String login(@ModelAttribute LoginForm form, BindingResult bindingResult, HttpServletRequest request) {
+    public String login(@ModelAttribute LoginForm form, BindingResult bindingResult,
+                        HttpServletRequest request) {
         // 유효성 검사
         if (bindingResult.hasErrors()) {
             return "login"; // 실패하면 다시 로그인 페이지
@@ -69,7 +70,7 @@ public class HomeController {
         if (loginMember == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
             System.out.println("로그인 실패");
-            return "login";
+            return "redirect:/login";
         }
 
         // 관리자일 경우
