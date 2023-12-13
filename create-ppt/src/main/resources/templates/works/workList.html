@@ -2,54 +2,64 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!--Bootstrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>I:GEULOO</title>
 </head>
 <body>
-<div>
-    <h1>I:GEULOO</h1>
+<div class="container">
+    <h1 class="text-center mb-3">I:GEULOO</h1>
+    <h2 class="text-center"><span th:text="${member.name}">회원</span>님의 작업 목록</h2>
+    <div class="container" style="width: 400px">
+        <div class="mb-3 text-center">
+            <table class="table table-light">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">작업 이름</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="work, stat : ${works}">
+                    <td th:text="${stat.index + 1}"></td>
+                    <td th:text="${work.title}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <div>
-        <h2><span th:text="${member.name}">회원</span>님의 작업 목록</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>작업 이름</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="work, stat : ${works}">
-                <td th:text="${stat.index + 1}"></td>
-                <td th:text="${work.title}"></td>
-            </tr>
-            </tbody>
-        </table>
+        <h3 class="text-center mb-3">작업 다운로드</h3>
+        <div class="container d-flex justify-content-center mb-3">
+            <form action="/works/download" method="post">
+                <div class="form-group">
+                    <div class="form-group mb-3">
+                        <input type="text" class="form-control" style="width: 300px" id="downloadName" name="downloadName" placeholder="다운로드할 작업">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" style="width: 150px">다운로드</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <h3 class="text-center mb-3">작업 삭제</h3>
+        <div class="container d-flex justify-content-center mb-3">
+            <form action="/works/delete" method="post">
+                <div class="form-group">
+                    <div class="form-group mb-3">
+                        <input type="text" class="form-control" style="width: 300px" id="deleteName" name="deleteName" placeholder="삭제할 작업">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary" style="width: 150px">삭제</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="text-center">
+            <br><button type="button" class="btn btn-primary" style="width: 150px" th:onclick="|location.href='@{/}'|">뒤로가기</button>
+        </div>
     </div>
-
-    <div>
-        <h2>작업 다운로드</h2>
-        <form action="/works/download" method="post">
-            <div class="form-group">
-                <input type="text" id="downloadName" name="downloadName" placeholder="다운로드할 작업 이름">
-                <button type="submit">다운로드</button>
-            </div>
-        </form>
-    </div>
-
-    <div>
-        <h2>작업 삭제</h2>
-        <form action="/works/delete" method="post">
-            <div class="form-group">
-                <input type="text" id="deleteName" name="deleteName" placeholder="삭제할 작업 이름">
-                <button type="submit">삭제</button>
-            </div>
-        </form>
-    </div>
-
-    <div>
-        <br><button type="button" th:onclick="|location.href='@{/}'|">뒤로가기</button>
-    </div>
-
 </div>
 </body>
 </html>

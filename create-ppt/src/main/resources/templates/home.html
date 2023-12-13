@@ -2,30 +2,31 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!--Bootstrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>I:GEULOO</title>
 </head>
 <body>
-<div>
-    <h1>I:GEULOO</h1>
-
-    <h2>홈 화면입니다. <span th:text="${member.name}">회원</span>님 안녕하세요.</h2>
-
-    <div>
-        <h3>발표자료 생성</h3>
-        <button type="button" th:onclick="|location.href='@{/files/upload}'|">Create PPT</button>
-    </div>
-
-    <div>
-        <h3>발표자료 확인</h3>
-        <button type="button" th:onclick="|location.href='@{/works}'|">작업 목록</button>
-    </div>
-    <br>
-    <div>
-        <form action="/logout" method="post">
-            <div>
-                <button type="submit">로그아웃</button>
-            </div>
-        </form>
+<div class="container">
+    <h1 class="text-center mb-3">I:GEULOO</h1>
+    <h2 class="text-center mb-3">홈 화면입니다. <span th:text="${member.name}">회원</span>님 안녕하세요.</h2>
+    <div class="container text-center">
+        <div class="mb-3">
+            <h3>발표자료 생성</h3>
+            <button type="button" class="btn btn-primary" style="width: 150px" th:onclick="|location.href='@{/files/upload}'|">Create PPT</button>
+        </div>
+        <div class="mb-3">
+            <h3>발표자료 확인</h3>
+            <button type="button" class="btn btn-primary" style="width: 150px" th:onclick="|location.href='@{/works}'|">작업 목록</button>
+        </div>
+        <br>
+        <div>
+            <form action="/logout" method="post">
+                <div>
+                    <button type="submit" class="btn btn-primary" style="width: 150px">로그아웃</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 </body>
