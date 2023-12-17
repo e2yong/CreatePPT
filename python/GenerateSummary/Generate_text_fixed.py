@@ -53,110 +53,23 @@ def Generate_Script(client,summary_data,minute):
             ]
     )
     return response.choices[0].message.content
-
 #입력받은 기본적인 정보를 토대로 요약문을 생성하는 함수
 #ppt와 대본을 만드는 함수와 호환하여 작동될 예정이다
-def Generate_Summary(client,input_data):
-    #word파일의 원문 텍스트들과 상황을 입력으로 받음
-    message = f"""주어진 {input_data}를 바탕으로 너가 발표를 한다고 생각했을 때 발표자료를 만들기 위해 필요한
-                1번째로 목차와 제목을 생성하며, 목차는 20개 이내의 토큰으로 만들어야한다
-                2번째는 각각의 목차는 소제목에 들어가야 하며, 소제목의 순번, 요약내용, 중요도가 들어가야 한다.
-                단, 주어진 정보의 문장을 그대로 인용하지는 말고 간결하고 명확한 표현으로 수정해서 채워야 한다.목차의 내용은 최소 3문장 이상으로 이루어진 1개의 문단으로 제공해야 하며
-                2개 이상의 문단을 제공하는 것도 문제는 없다
-                3번째는 앞서 진행한 과정중에서 가장 주제와 밀접하고 중요도가 높은 목차에는 [이미지]라는 내용을 추가해 중요도를 표현해야 한다.
-                4번째로는 너가 만들어낸 문단과 문장들을 발표상황에 있다고 생각했을 때 수정할 내용이 있다면 수정을 진행하며,'?'와 '!' 같은 특수기호가 있다면 삭제를 진행해야한다
-                5번째로는 목차안에 있는 소제목들 중에서 가장 중요도 수치가 높은 소제목에 내용에 대해 표현할 이미지에 대한 설명을 [IMG]태그 안에 제공해야하며
-                각 목차별 중요도를 0~100까지의 수치로 표현해야한다.
-
-                너는 주어진 형식에 맞는 대답을 제공해야해:
-                제목 - (제목, 소제목,목차)
-                소제목 - (순번,요약내용,중요도)
-                요약내용 - (주어진 데이터를 요약한 정보,이미지)
-
-                제목에는 [제목]태그를 앞에 붙여줘
-                제목에는 [/제목]태그를 뒤에 붙어줘
-                목차에는 [목차]태그를 앞에 붙여줘
-                목차에는 [/목차]태그를 뒤에 붙어줘
-                소제목에는 [소제목]태그를 앞에 붙여줘
-                소제목 내용 뒤에 [순번] 태그와 순번 정보를 붙어줘
-                순번 뒤에는 [중요도]태그와 중요도 수치를 봍여줘
-                소제목에는 [/소제목]태그를 뒤에 붙어줘
-                요약내용에는 [요약내용]태그를 앞에 붙여줘
-                요약내용에는 [/요약내용]태그를 뒤에 붙어줘
-                이미지에는 [IMG]태그를 앞에 붙여줘
-                이미지에는 [/IMG]태그를 뒤에 붙여줘
-                소제목이 끝날때 마다 [소제목 단락 종료]라는 태그를 뒤에 붙여줘
-
-                예시 자료 :
-                [제목] 달 탐사 2단계 사업 예비타당성 조사 통과 [/제목]
-                [목차] 1. 2032년에 독자 탐사선 착륙 예정
-                       2. 달 착륙선 개발에 10년간 5303억4000만원 투입
-                       3. 우주탐사 로드맵 확정 및 탑재체 개발 추진 예정
-                       [/목차]
-                [소제목] 1. 2032년에 독자 탐사선 착륙 예정[/소제목]
-                [순번] 1번
-                [중요도] 55
-                [요약내용]
-                - 한국의 첫 달 탐사선 '다누리'가 8월 4일에 발사되었다.
-                - '달 탐사 2단계 사업'은 2032년에 독자 탐사선을 달에 착륙시키기 위해 예비타당성 조사를 통과했다.
-                - 이 사업은 1.8톤급 달 착륙선을 개발하여 정밀한 연착륙을 수행한다.
-                - 예상지 주변의 장애물을 탐지하고 회피하는 기능도 탑재할 예정이다.
-                [/요약내용]
-
-                [소제목 단락 종료]
-
-                [소제목] 2. 달 착륙선 개발에 10년간 5303억4000만원 투입[/소제목]
-                [순번] 2번
-                [중요도] 85
-                [요약내용]
-                [IMG] 달 착륙선 그림 [/IMG]
-                - 과기정통부는 2024년부터 2033년까지 10년간 5303억4000만원을 달 탐사 2단계 사업에 투자할 예정이다.
-                - 예산은 1년 늘어나면서 881억600만원이 줄었다.
-                - 달 착륙선 개발을 위해 우주 탐사선 추진시스템과 연착륙을 위한 장애물 탐지 및 회피기술, 항법시스템 등을 국산화할 계획이다.
-                [/요약내용]
-
-                [소제목 단락 종료]
-
-                [소제목] 3. 우주탐사 로드맵 확정 및 탑재체 개발 추진 예정[/소제목]
-                [순번] 3번
-                [요약내용]
-                [중요도] 60
-                - 과기정통부는 산학연과 협력하여 달 착륙선의 과학기술 임무를 담은 우주탐사 로드맵을 수립할 예정이다.
-                - 로드맵을 기반으로 달 착륙선 탑재체를 추진하며, 내년 초까지 선정돼 개발될 것이다.
-                - 달 착륙선의 연착륙 임무는 2031년에 우선 차세대 발사체를 이용해 검증되고, 2032년에는 달 표면 탐사 임무까지 수행한다.
-                [/요약내용]
-
-                [소제목 단락 종료]
-                
-                생성한 목차에 맞는 내용은 무조건 들어가야 하며, 내용적으로 어울리지 않는 내용은 추가하면 안된다.
-
-                """
-
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
-        messages=[
-        {"role": "user", "content": message}
-            ]
-    )
-    return response.choices[0].message.content
 
 
-def Generate_Summary_fixed(client, input_data):
+def Generate_Summary(client, input_data):
     # 추출한 텍스트와 Gpt 사용을 위한 client를 받음
     message = f"""
-                주어진 {input_data}를 바탕으로 너가 발표를 한다고 생각했을 때 발표자료를 만들기 위해 필요한
-                1번째로 목차와 제목을 생성하며, 목차는 20개 이내의 토큰으로 만들어야한다
-                2번째는 소제목을 생성해야 하며, 소제목에 해당하는 내용을 채워야한다. 소제목은 목차와 일치해야 한다.
-                단, 주어진 정보의 문장을 인용해도 되지만 , 간결하고 명확한 표현으로 채워야 하며,목차의 내용은 최소 3문장 이상으로 이루어진 1개의 문단으로 제공해야 하며 
-                2개 이상의 문단을 제공해도 된다.
+                주어진 {input_data}를 바탕으로 너가 발표를 한다고 생각했을 때 발표자료를 만들기 위해 필요한 내용을 넣어야 한며 아래와 같은 과정을 거쳐 진행해야 한다.
+                1번째로 목차와 제목을 생성하며, 목차는 20개 이내의 토큰으로 만들어야하며, 목차에 들어가는 내용의 수는 5,6개 중 하나로 정해야 한다.
+                2번째는 소제목을 생성해야 하며, 소제목에 해당하는 내용을 채워야한다. 소제목과 목차는 일치해야 한다.
+                단, 주어진 정보의 문장을 인용해도 되지만, 간결하고 명확한 표현으로 채워야 하며,소제목의 내용은 최대한 많이 넣야아 한다.
                 3번째는 너가 만들어낸 문단과 문장들을 발표상황에 있다고 생각했을 때 수정할 내용이 있다면 수정을 진행하며,'?'와 '!' 같은 특수기호가 있다면 삭제를 진행해야한다
-                4번째는 소제목들 중에 발표자료의 주제와 연관성에 따라 중요도 수치를 주어야 하며, 중요도 수치는 0~100사이의 값을 주어야 한다.
-                5번째는 중요도 수치가 60 이상인 소제목의 요약내용 안에는 [IMG] 태그안에 소제목을 표현할 수 있는 그림의 내용을 [IMG]태그 안에 넣어 수정을 진행해야 한다
-                6번째는 요약 내용 안에 [IMG]태그가 있는 경우 소제목의 슬라이드에 L_IS라 작성하며, 없는 경우 L_CS라고 작성해야 한다.
+                4번째는 소제목의 요약내용 안에는 [IMG] 태그안에 소제목을 표현할 수 내용을 [IMG]태그 안에 넣어 수정을 진행해야 한다
 
                 너는 주어진 형식에 맞는 대답을 제공해야해:
                 제목 - (제목, 소제목,목차)
-                소제목 - (요약내용,중요도,슬라이드)
+                소제목 - (요약내용,중요도)
                 요약내용 - (IMG,주어진 데이터를 요약한 정보)
 
                 제목에는 [제목]태그를 앞에 붙여줘
@@ -170,18 +83,21 @@ def Generate_Summary_fixed(client, input_data):
                 요약내용에는 [/요약내용]태그를 뒤에 붙어줘
                 IMG에는 [IMG]태그를 앞에 붙여줘
                 IMG에는 [/IMG]태그를 뒤에 붙여줘
-                소제목이 끝날때 마다 [소제목 단락 종료]라는 태그를 뒤에 붙여줘
-
+                소제목이 끝날때 마다 [소제목 단락 종료]라는 태그를 뒤에 붙여줘    
+                예시 자료의 형식을 무조건 지켜야 한다.
+               
                 예시 자료 :
                 [제목] 달 탐사 2단계 사업 예비타당성 조사 통과 [/제목]
+                
                 [목차] 1. 2032년에 독자 탐사선 착륙 예정
                        2. 달 착륙선 개발에 10년간 5303억4000만원 투입
                        3. 우주탐사 로드맵 확정 및 탑재체 개발 추진 예정
                        [/목차]
+                
                 [소제목] 2032년에 독자 탐사선 착륙 예정[/소제목]
                 [중요도] 55
-                [슬라이드] L_CS
                 [요약내용]
+                [IMG] 다누리 탐사선 이미지 [IMG]
                 - 한국의 첫 달 탐사선 '다누리'가 8월 4일에 발사되었다.
                 - '달 탐사 2단계 사업'은 2032년에 독자 탐사선을 달에 착륙시키기 위해 예비타당성 조사를 통과했다.
                 - 이 사업은 1.8톤급 달 착륙선을 개발하여 정밀한 연착륙을 수행한다.
@@ -192,7 +108,6 @@ def Generate_Summary_fixed(client, input_data):
 
                 [소제목] 달 착륙선 개발에 10년간 5303억4000만원 투입[/소제목]
                 [중요도] 85
-                [슬라이드] L_IS
                 [요약내용]
                 [IMG] 달 착륙선 그림[/IMG]
                 - 과기정통부는 2024년부터 2033년까지 10년간 5303억4000만원을 달 탐사 2단계 사업에 투자할 예정이다.
@@ -205,7 +120,6 @@ def Generate_Summary_fixed(client, input_data):
                 [소제목] 우주탐사 로드맵 확정 및 탑재체 개발 추진 예정[/소제목]
                 [요약내용]
                 [중요도] 70
-                [슬라이드] L_IS
                 [IMG] 우주 탐사 로드맵 그림[/IMG]
                 - 과기정통부는 산학연과 협력하여 달 착륙선의 과학기술 임무를 담은 우주탐사 로드맵을 수립할 예정이다.
                 - 로드맵을 기반으로 달 착륙선 탑재체를 추진하며, 내년 초까지 선정돼 개발될 것이다.
@@ -213,7 +127,26 @@ def Generate_Summary_fixed(client, input_data):
                 [/요약내용]
 
                 [소제목 단락 종료]
+                [소제목] 우주탐사 로드맵 확정 및 탑재체 개발 추진 예정[/소제목]
+                [요약내용]
+                [중요도] 70
+                [IMG] 우주 탐사 로드맵 그림[/IMG]
+                - 과기정통부는 산학연과 협력하여 달 착륙선의 과학기술 임무를 담은 우주탐사 로드맵을 수립할 예정이다.
+                - 로드맵을 기반으로 달 착륙선 탑재체를 추진하며, 내년 초까지 선정돼 개발될 것이다.
+                - 달 착륙선의 연착륙 임무는 2031년에 우선 차세대 발사체를 이용해 검증되고, 2032년에는 달 표면 탐사 임무까지 수행한다.
+                [/요약내용]
 
+                [소제목 단락 종료]
+                [소제목] 우주탐사 로드맵 확정 및 탑재체 개발 추진 예정[/소제목]
+                [요약내용]
+                [중요도] 70
+                [IMG] 우주 탐사 로드맵 그림[/IMG]
+                - 과기정통부는 산학연과 협력하여 달 착륙선의 과학기술 임무를 담은 우주탐사 로드맵을 수립할 예정이다.
+                - 로드맵을 기반으로 달 착륙선 탑재체를 추진하며, 내년 초까지 선정돼 개발될 것이다.
+                - 달 착륙선의 연착륙 임무는 2031년에 우선 차세대 발사체를 이용해 검증되고, 2032년에는 달 표면 탐사 임무까지 수행한다.
+                [/요약내용]
+
+                [소제목 단락 종료]
                 생성한 목차에 맞는 내용은 무조건 들어가야 하며, 내용적으로 어울리지 않는 내용은 추가하면 안된다.
 
                 """
@@ -286,89 +219,18 @@ def Insert_caption(client,summary_data,caption):
 
 
 
-def Generate_PPT(client,summary_data,slide_length):
-    #PPTX를 사용하기 위한 텍스트 형태를 만들어내는 함수
-    #요약 데이터와 슬라이드 길이를 받으며, 10이 default값이다
-    message = f"""Create an outline for a slideshow presentation on the content of {summary_data} which is {slide_length}
-        slides long. Make sure it is {slide_length} long.
-        Elaborate on the Content, provide as much information as possible.
-        REMEMBER TO PLACE a [/CONTENT] at the end of the Content.
-        Make [TITLE] simply.
-
-        You are allowed to use the following slide types:
-        Title Slide - (Title, Subtitle)
-        Content Slide - (Title, Content)
-        Image Slide - (Title, Content, Image)
-        Thanks Slide - (Title)
-
-        Put this tag before the Title Slide: [L_TS]
-        Put this tag before the Content Slide: [L_CS]
-        Put this tag before the Image Slide: [L_IS]
-        Put this tag before the Thanks Slide: [L_THS]
-
-        Put this tag before the Title: [TITLE]
-        Put this tag after the Title: [/TITLE]
-        Put this tag before the Subitle: [SUBTITLE]
-        Put this tag after the Subtitle: [/SUBTITLE]
-        Put this tag before the Content: [CONTENT]
-        Put this tag after the Content: [/CONTENT]
-        Put this tag before the Image: [IMAGE]
-        Put this tag after the Image: [/IMAGE]
-
-        Put "[SLIDEBREAK]" after each slide
-
-        For example:
-        
-        [L_TS]
-        [TITLE]Among Us[/TITLE]
-
-        [SLIDEBREAK]
-
-        [L_CS]
-        [TITLE]What Is Among Us?[/TITLE]
-        [CONTENT]
-        1. Among Us is a popular online multiplayer game developed and published by InnerSloth.
-        2. The game is set in a space-themed setting where players take on the roles of Crewmates and Impostors.
-        3. The objective of Crewmates is to complete tasks and identify the Impostors among them, while the Impostors' goal is to sabotage the spaceship and eliminate the Crewmates without being caught.
-        [/CONTENT]
-
-        [SLIDEBREAK]
-
-        [L_IS]
-        [TITLE]Features of Among us[/TITLE]
-        [CONTENT]
-        [IMG] Among us logo [/IMG]
-        1. The game is very popular in student.
-        2. The game ranking's in steam is maintained for a long time.
-        3. Many streamers play Among us a lot.
-        [/CONTENT]
-
-        [SLIDEBREAK]
-
-        [L_THS]
-        [TITLE]Thank you[/TITLE]
-
-        제공할 내용은 한글로 작성해야 한다.
-        If slide's [CONTENT] has [IMG] tag, You should modify [L_CS] to [L_IS]
-        Do not include any special characters (?, !, ., :, ) in the Title.
-        Do not include any additional information in your response and stick to the format
-        ."""
-
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
-        messages=[
-        {"role": "user", "content": message}
-            ]
-    )
-    return response.choices[0].message.content
 
 
-def Generate_PPT_fixed(client, summary_data, slide_length):
+def Generate_PPT(client, summary_data, slide_length):
     # PPTX를 사용하기 위한 텍스트 형태를 만들어내는 함수
     # 요약 데이터와 슬라이드 길이를 받으며, 10이 default값이다
     message = f"""Create an outline for a slideshow presentation of {summary_data} which is {slide_length}
             slides long. Make sure it is {slide_length} long.
-            주어진 정보의 소제목의 슬라이드의 내용을 토대로 슬라이드 타입을 결정해야 한다
+            주어진 정보에서 [IMG]태그가 있는 내용에서는 [TITLE] 위에 무조건[L_IS] 태그를 주어야 한다.
+            예를 들면 : 
+            [L_IS]
+            [TITLE]Features of Among us[/TITLE]
+            [CONTENT]
             You are allowed to use the following slide types:
             Title Slide - (Title, Subtitle)
             Content Slide - (Title, Content)
@@ -395,16 +257,6 @@ def Generate_PPT_fixed(client, summary_data, slide_length):
             [L_TS]
             [TITLE]Among Us[/TITLE]
 
-            [SLIDEBREAK]
-
-            [L_CS] 
-            [TITLE]What Is Among Us?[/TITLE]
-            [CONTENT]
-            1. Among Us is a popular online multiplayer game developed and published by InnerSloth.
-            2. The game is set in a space-themed setting where players take on the roles of Crewmates and Impostors.
-            3. The objective of Crewmates is to complete tasks and identify the Impostors among them, while the Impostors' goal is to sabotage the spaceship and eliminate the Crewmates without being caught.
-            [/CONTENT]
-            
             [SLIDEBREAK]
             
             [L_IS]

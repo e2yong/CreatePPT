@@ -1,6 +1,7 @@
 import os
 
-from GenerateSummary.Generate_text import *
+#from GenerateSummary.Generate_text import *
+from GenerateSummary.Generate_text_fixed import *
 from GenerateSummary.word import *
 from Read_data.Read_data import *
 
