@@ -18,7 +18,7 @@
 
 ## 주요 기능
 #### 1. 자료 요약 기능
-- 파일 업로드 
+- 파일 업로드
 - 이미지와 텍스트 추출
   - 'Apache POI'로 워드(.docx) 파일에서 텍스트와 이미지 추출
 - 이미지 캡셔닝(FastAPI 서버)
@@ -59,6 +59,8 @@
   - Spring Boot, FastAPI
 - 데이터베이스
   - MariaDB, Spring Data JPA
+- 프런트엔드
+  - Thymeleaf, Bootstrap
 - API & 라이브러리
   - ChatGPT API(GPT-3.5 Trubo 모델)
   - python-pptx 라이브러리
