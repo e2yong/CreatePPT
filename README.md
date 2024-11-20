@@ -59,7 +59,7 @@
   - Spring Boot, FastAPI
 - 데이터베이스
   - MariaDB, Spring Data JPA
-- 프런트엔드
+- 프론트엔드
   - Thymeleaf, Bootstrap
 - API & 라이브러리
   - ChatGPT API(GPT-3.5 Trubo 모델)
